@@ -79,6 +79,19 @@ function App() {
     toggleDialog();
   }
 
+  function toggleToDoCompleted(toDo) {
+    setToDos((prevState) => {
+      return prevState.map((t) => {
+        if (t.id === toDo.id)
+          return {
+            ...t,
+            completed: !t.completed,
+          };
+        return t;
+      });
+    });
+  }
+
   return (
     <main>
       <Container>
@@ -93,7 +106,13 @@ function App() {
             {toDos
               .filter((t) => !t.completed)
               .map(function (t) {
-                return <ToDoItem key={t.id} item={t} />;
+                return (
+                  <ToDoItem
+                    key={t.id}
+                    item={t}
+                    onToggleCompleted={toggleToDoCompleted}
+                  />
+                );
               })}
           </ToDoList>
           <SubHeading>Concluído</SubHeading>
@@ -101,7 +120,13 @@ function App() {
             {toDos
               .filter((t) => t.completed)
               .map(function (t) {
-                return <ToDoItem key={t.id} item={t} />;
+                return (
+                  <ToDoItem
+                    key={t.id}
+                    item={t}
+                    onToggleCompleted={toggleToDoCompleted}
+                  />
+                );
               })}
           </ToDoList>
           <Footer>
