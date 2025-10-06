@@ -1,0 +1,15 @@
+.btn-save {
+  background-color: #9747ff;
+  padding: 16px;
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: "Montserrat", sans-serif;
+  cursor: pointer;
+}
+
+.btn-save:hover {
+  background-color: #544acb;
+}

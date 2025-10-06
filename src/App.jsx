@@ -10,6 +10,7 @@ import { IconPlus, IconSchool } from "./components/icons";
 import { SubHeading } from "./components/SubHeading";
 import { ToDoItem } from "./components/ToDoItem";
 import { ToDoList } from "./components/ToDoList";
+import { ToDoForm } from "./components/ToDoForm";
 
 const toDos = [
   {
@@ -59,6 +60,11 @@ function App() {
     setShowDialog(!showDialog);
   }
 
+  function addToDo() {
+    console.log("precisamos adicionar uma nova tarefa na lista");
+    toggleDialog();
+  }
+
   return (
     <main>
       <Container>
@@ -82,7 +88,7 @@ function App() {
           </ToDoList>
           <Footer>
             <Dialog isOpen={showDialog} onClose={toggleDialog}>
-              <p>teste de um texto maior</p>
+              <ToDoForm onSubmit={addToDo}></ToDoForm>
             </Dialog>
             <FabButton onClick={toggleDialog}>
               <IconPlus />

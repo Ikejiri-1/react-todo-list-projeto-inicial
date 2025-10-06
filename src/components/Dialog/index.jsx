@@ -27,7 +27,7 @@ export function Dialog({ isOpen, onClose, children }) {
             <IconClose></IconClose>
           </button>
         </div>
-        {children}
+        <div className="body">{children}</div>
       </dialog>
     </>
   );
