@@ -5,7 +5,9 @@ const ToDos = "toDos";
 export function ToDoProvider({ children }) {
   const savedToDo = localStorage.getItem(ToDos);
 
+  const [showDialog, setShowDialog] = useState(false);
   const [toDos, setToDos] = useState(savedToDo ? JSON.parse(savedToDo) : []);
+  const [selectedToDo, setSelectedToDo] = useState(null);
 
   useEffect(() => {
     localStorage.setItem(ToDos, JSON.stringify(toDos));
@@ -29,7 +31,6 @@ export function ToDoProvider({ children }) {
       return prevState.filter((t) => t.id !== toDo.id);
     });
   }
-
   function toggleToDoCompleted(toDo) {
     setToDos((prevState) => {
       return prevState.map((t) => {
@@ -42,8 +43,44 @@ export function ToDoProvider({ children }) {
       });
     });
   }
+  function editToDo(formData) {
+    setToDos((prevState) => {
+      return prevState.map((t) => {
+        if (t.id === selectedToDo.id)
+          return {
+            ...t,
+            description: formData.get("description"),
+          };
+        return t;
+      });
+    });
+  }
+
+  function openDialog(todo) {
+    if (todo) {
+      setSelectedToDo(todo);
+    }
+    setShowDialog(true);
+  }
+  function closeDialog() {
+    setShowDialog(false);
+    setSelectedToDo(null);
+  }
+
   return (
-    <ToDoContext value={{ toDos, addToDo, removeToDo, toggleToDoCompleted }}>
+    <ToDoContext
+      value={{
+        toDos,
+        addToDo,
+        removeToDo,
+        toggleToDoCompleted,
+        showDialog,
+        openDialog,
+        closeDialog,
+        selectedToDo,
+        editToDo,
+      }}
+    >
       {children}
     </ToDoContext>
   );

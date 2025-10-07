@@ -4,7 +4,7 @@ import { use } from "react";
 import ToDoContext from "../ToDoProvider/ToDoContext";
 
 export function ToDoItem({ item }) {
-  const { toggleToDoCompleted, removeToDo } = use(ToDoContext);
+  const { toggleToDoCompleted, removeToDo, openDialog } = use(ToDoContext);
   const styles = ["todo-item"];
 
   if (item.completed) {
@@ -28,7 +28,7 @@ export function ToDoItem({ item }) {
           <button className="btn" onClick={() => removeToDo(item)}>
             <IconTrash />
           </button>
-          <button className="btn">
+          <button className="btn" onClick={() => openDialog(item)}>
             <IconPencil />
           </button>
         </div>
