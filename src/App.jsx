@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { use, useState } from "react";
 import { ChecklistsWrapper } from "./components/ChecklistsWrapper";
 import { Container } from "./components/Container";
 import { Dialog } from "./components/Dialog";
@@ -7,89 +7,21 @@ import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
 import { Heading } from "./components/Heading";
 import { IconPlus, IconSchool } from "./components/icons";
-import { SubHeading } from "./components/SubHeading";
-import { ToDoItem } from "./components/ToDoItem";
-import { ToDoList } from "./components/ToDoList";
 import { ToDoForm } from "./components/ToDoForm";
-
-// const toDos = [
-
-//   {
-//     id: 2,
-//     description: "Props, state e hooks",
-//     completed: false,
-//     createdAt: "2022-10-31",
-//   },
-//   {
-//     id: 3,
-//     description: "Ciclo de vida dos componentes",
-//     completed: false,
-//     createdAt: "2022-10-31",
-//   },
-//   {
-//     id: 4,
-//     description: "Testes unitários com Jest",
-//     completed: false,
-//     createdAt: "2022-10-31",
-//   },
-// ];
-// const completed = [
-//   ,
-//   {
-//     id: 6,
-//     description: "Rotas dinâmicas",
-//     completed: true,
-//     createdAt: "2022-10-31",
-//   },
-// ];
+import ToDoContext from "./components/ToDoProvider/ToDoContext";
+import { ToDoGroup } from "./components/ToDoGroup";
 
 function App() {
   const [showDialog, setShowDialog] = useState(false);
-  const [toDos, setToDos] = useState([
-    {
-      id: 1,
-      description: "JSX e componentes",
-      completed: false,
-      createdAt: "2022-10-31",
-    },
-    {
-      id: 2,
-      description: "Controle de inputs e formulários controlados",
-      completed: true,
-      createdAt: "2022-10-31",
-    },
-  ]);
+  const { toDos, addToDo } = use(ToDoContext);
 
   function toggleDialog() {
     setShowDialog(!showDialog);
   }
 
-  function addToDo(formData) {
-    const description = formData.get("description");
-    setToDos((prevState) => {
-      const newToDo = {
-        id: prevState.length + 1,
-        description,
-        completed: false,
-        createdAt: new Date().toISOString("pt-BR"),
-      };
-      return [...prevState, newToDo];
-    });
-    console.log("precisamos adicionar uma nova tarefa na lista");
+  function handleFormSubmit(formData) {
+    addToDo(formData);
     toggleDialog();
-  }
-
-  function toggleToDoCompleted(toDo) {
-    setToDos((prevState) => {
-      return prevState.map((t) => {
-        if (t.id === toDo.id)
-          return {
-            ...t,
-            completed: !t.completed,
-          };
-        return t;
-      });
-    });
   }
 
   return (
@@ -101,37 +33,18 @@ function App() {
           </Heading>
         </Header>
         <ChecklistsWrapper>
-          <SubHeading>Para estudar</SubHeading>
-          <ToDoList>
-            {toDos
-              .filter((t) => !t.completed)
-              .map(function (t) {
-                return (
-                  <ToDoItem
-                    key={t.id}
-                    item={t}
-                    onToggleCompleted={toggleToDoCompleted}
-                  />
-                );
-              })}
-          </ToDoList>
-          <SubHeading>Concluído</SubHeading>
-          <ToDoList>
-            {toDos
-              .filter((t) => t.completed)
-              .map(function (t) {
-                return (
-                  <ToDoItem
-                    key={t.id}
-                    item={t}
-                    onToggleCompleted={toggleToDoCompleted}
-                  />
-                );
-              })}
-          </ToDoList>
+          <ToDoGroup
+            heading="Para estudar"
+            items={toDos.filter((t) => !t.completed)}
+          />
+          <ToDoGroup
+            heading="Concluídos"
+            items={toDos.filter((t) => t.completed)}
+          />
+
           <Footer>
             <Dialog isOpen={showDialog} onClose={toggleDialog}>
-              <ToDoForm onSubmit={addToDo}></ToDoForm>
+              <ToDoForm onSubmit={handleFormSubmit}></ToDoForm>
             </Dialog>
             <FabButton onClick={toggleDialog}>
               <IconPlus />
