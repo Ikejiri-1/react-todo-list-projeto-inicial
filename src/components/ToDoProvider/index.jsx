@@ -7,7 +7,7 @@ export function ToDoProvider({ children }) {
 
   const [showDialog, setShowDialog] = useState(false);
   const [toDos, setToDos] = useState(savedToDo ? JSON.parse(savedToDo) : []);
-  const [selectedToDo, setSelectedToDo] = useState(null);
+  const [selectedToDo, setSelectedToDo] = useState(false);
 
   useEffect(() => {
     localStorage.setItem(ToDos, JSON.stringify(toDos));
@@ -23,7 +23,6 @@ export function ToDoProvider({ children }) {
       };
       return [...prevState, newToDo];
     });
-    console.log("precisamos adicionar uma nova tarefa na lista");
   }
 
   function removeToDo(toDo) {
